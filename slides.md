@@ -112,7 +112,7 @@ transition: slide-up
 - Continuous Integration
 - Decouple Deployment from Release
 - Environment-Specific Feature Sets
-  - Pre-release UATs
+- Pre-release UATs
 
 ---
 layout: center
@@ -175,6 +175,11 @@ gitGraph
 
 _I sense a meeting in your near future..._
 
+<!--
+You can probably get out of this quandary by creating a new 4.1 feature-branch and fight all your other automation
+It's still far from ideal as as your automation is still primed to release v4.2.1 over v4.1.20
+-->
+
 ---
 layout: center
 level: 2
@@ -205,242 +210,125 @@ gitGraph
 ```
 
 ---
-
-# Navigation
-
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
-
-## Keyboard Shortcuts
-
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
-
-<!-- https://sli.dev/guide/animations.html#click-animations -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
----
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
+layout: center
+level: 2
+transition: slide-up
 ---
 
-# Code
-
-Use code snippets and get the highlighting directly, and even types hover![^1]
-
-```ts {all|5|1-6|9|all} twoslash
-// TwoSlash enables TypeScript hover information and errors in markdown code blocks
-// Learn more at https://www.typescriptlang.org/dev/twoslash/
-function getUser(id: number): User {
-  return undefined as any
-}
-function saveUser(id: number, user: User) {
-  // ...
-}
-// ---cut---
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  role: string
-// ^?
-}
-
-function updateUser(id: number, update: User) {
-  const user = getUser(id)
-  const newUser = { ...user, ...update }
-  saveUser(id, newUser)
-}
-```
-
-<arrow v-click="[3, 4]" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
-
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
-
-<style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
-
-
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectivness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
----
-src: ./pages/multiple-entries.md
-hide: false
----
+# Killswitches
 
 ---
 layout: center
-class: text-center
+level: 2
+transition: slide-left
 ---
 
-# Learn More
+# Canary Releases
 
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+---
+layout: section
+---
+
+# Homemade Alternatives to Feature Flags Platforms
+
+---
+level: 2
+---
+# Hardware
+
+- Soldered Components
+- Switches
+
+![DIP Switches](https://upload.wikimedia.org/wikipedia/commons/3/34/Nedap_ESD1_-_printer_controller_-_DIP_switch_-_all_off-91979.jpg)
+Image: [Raymond Spekking](https://en.wikipedia.org/wiki/File:Nedap_ESD1_-_printer_controller_-_DIP_switch_-_all_off-91979.jpg)
+
+---
+layout: two-cols-header
+level: 2
+---
+
+# Software
+
+## Access Control
+
+::left::
+- Works when developing *new* features/components
+- Enables Canary Releases
+::right::
+- Loses its utility when the feature is released
+- Can only handle feature overhauls by treating them as new features
+
+---
+level: 3
+---
+
+## Configuration Options
+
+- "Compiler" Flags
+  + Once and Done
+  - Requires Better Artifacts Versionning
+- Environment Variables / Configuration Files
+  + No External Dependencies
+  + Allows for Environment-Specific Flags
+  - Might need to use IaC/CaC 
+
+---
+level: 3
+---
+
+# In-House Platform
+
+- Probably meets your current needs
+- **Are you in the business of selling Feature Toggles Platforms?**
+
+---
+level: 1
+layout: section
+---
+
+# Let's Decouple Features From Versions!
+
+---
+level: 2
+---
+
+```mermaid
+sequenceDiagram
+actor D as Dev
+participant C as SCM + CI/CD
+participant S as Prod
+participant F as Feature<br/>Platform
+actor B as Business
+B ->> F: Create Flags
+
+Note over D: Write Code
+
+D ->> C: Push Code
+Note over C: Build, Test, Assemble
+
+C ->> S: Deploy
+
+B ->> F: Activate Feature
+
+S->>F: Poll
+F->>S: Activate Features
+```
+
+---
+level: 2
+---
+# Drop Dead Branch
+
+```mermaid
+sequenceDiagram
+actor D as Dev
+participant C as SCM + CI/CD
+participant S as Prod
+participant F as Feature<br/>Platform
+actor B as Business
+
+Note over D: Drop Dead Branch
+D->>C: Push Code
+C->>S: Deploy
+D->>F: Delete Feature
+```
