@@ -27,10 +27,25 @@ You're probably already reflecting on the concept if you haven't already done yo
 -->
 
 ---
-layout: center
+layout: two-cols-header
+transition: none
 ---
 
 # $ whoami
+
+Formerly DecSecOps @ FOCUS
+
+::left::
+- 10 Servers
+- < 50 transactionns/s
+- 1 environment
+- < 1 deployment/week
+
+::right::
+- 100 Servers
+- 1000 transactionns/s
+- 10 environments
+- 200 deployments/day
 
 ---
 hideInToc: true
@@ -102,7 +117,7 @@ level: 2
 - Language Selectors
 
 ---
-layout: section
+layout: center
 transition: slide-up
 ---
 
@@ -126,6 +141,16 @@ transition: slide-up
 image: [NVidia](https://nvidia.com)
 
 ---
+layout: center
+level: 2
+transition: slide-up
+---
+
+# Product Identification @ FOCUS
+
+<center><img src="imgs/teensy_smd_pinout.jpg" style="max-height: 50%; max-width: 50%" /></center>
+
+---
 layout: two-cols-header
 level: 2
 transition: slide-up
@@ -146,7 +171,7 @@ gitGraph
   branch feature
   branch hotfix
   checkout feature
-  commit
+  commit type:REVERSE
   checkout main
   merge feature tag:"v4.2.0"
   checkout hotfix
@@ -161,7 +186,7 @@ gitGraph
   commit tag: "v4.1.19"
   branch feature
   checkout feature
-  commit
+  commit type: REVERSE
   checkout main
   merge feature tag:"v4.2.0"
   branch hotfix
@@ -179,6 +204,116 @@ _I sense a meeting in your near future..._
 You can probably get out of this quandary by creating a new 4.1 feature-branch and fight all your other automation
 It's still far from ideal as as your automation is still primed to release v4.2.1 over v4.1.20
 -->
+
+---
+layout: default
+level: 2
+transition: none
+---
+
+# Decouple Deployment from Release Cont.
+
+```mermaid
+gitGraph
+  commit  tag: "v4.1.19"
+  branch feature
+  branch hotfix
+  branch v4.1
+  checkout feature
+  commit type:REVERSE
+  checkout main
+  merge feature tag:"v4.2.0"
+  checkout hotfix
+  commit id:"H0TF1X"
+  checkout main
+  merge hotfix id:"MERGE" tag:"v4.2.1"
+  checkout v4.1
+  cherry-pick id:"H0TF1X" tag: "v4.1.20"
+```
+<!-- You could always create a new release branch to release a specially doctored hotfix -->
+
+---
+layout: default
+level: 2
+transition: none
+---
+
+# Decouple Deployment from Release Cont.
+
+```mermaid
+gitGraph
+  commit  tag: "v4.1.19"
+  branch feature
+  branch hotfix
+  branch v4.1
+  checkout feature
+  commit type: REVERSE
+  checkout main
+  merge feature tag:"v4.2.0"
+  checkout hotfix
+  commit id:"H0TF1X"
+  checkout main
+  merge hotfix id:"MERGE" tag:"v4.2.1"
+  checkout v4.1
+  cherry-pick id:"H0TF1X" tag: "v4.1.20"
+  checkout main
+  branch feature-2
+  checkout feature-2
+  commit
+  checkout main
+  merge feature-2 tag:"v4.2.2"
+```
+
+<!-- However, your CI/CD is still primed to release the next version -->
+
+---
+layout: default
+level: 2
+transition: none
+---
+
+# Decouple Deployment from Release Cont.
+
+```mermaid
+gitGraph
+  commit  tag: "v4.1.19"
+  branch feature
+  branch hotfix
+  branch v4.1
+  checkout feature
+  commit type: REVERSE
+  checkout main
+  merge feature tag:"v4.2.0"
+  checkout hotfix
+  commit id:"H0TF1X"
+  checkout main
+  merge hotfix id:"MERGE" tag:"v4.2.1"
+  checkout v4.1
+  cherry-pick id:"H0TF1X" tag: "v4.1.20"
+  branch feature-2
+  checkout feature-2
+  commit
+  checkout v4.1
+  merge feature-2 tag:"v4.1.21"
+```
+
+<!-- By now, you're probably already tired of fighting your CI/CD -->
+
+---
+layout: center
+level: 2
+transition: none
+---
+
+![Code Freeze](https://codefreeze.fi/logos/codefreeze.svg)
+
+---
+layout: section
+hideInToc: true
+transition: slide-up
+---
+
+# DEMO
 
 ---
 layout: center
