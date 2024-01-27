@@ -10,6 +10,7 @@
   "dependencies": {
     "@slidev/cli": "^0.46.1",
     "@slidev/theme-default": "latest",
-    "@slidev/theme-seriph": "latest"
+    "@slidev/theme-seriph": "latest",
+    "unleash-client": "^5.3.2"
   }
 }
