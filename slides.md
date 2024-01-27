@@ -36,16 +36,18 @@ transition: none
 Formerly DecSecOps @ FOCUS
 
 ::left::
-- 10 Servers
-- < 50 transactionns/s
+- 10 Hosts / 50 Services
+- < 50 transactions/s
 - 1 environment
 - < 1 deployment/week
+- 5th dev
 
 ::right::
-- 100 Servers
-- 1000 transactionns/s
+- 100 Hosts / 400 Services
+- 1000 transactions/s
 - 10 environments
 - 200 deployments/day
+- 15 devs
 
 ---
 hideInToc: true
@@ -329,6 +331,80 @@ Source: [Unleash](https://getunleash.io)
 ---
 layout: center
 level: 2
+---
+
+# Install Dependencies
+```sh
+npm i koa unleash-client
+npm i -D @types/koa typescript
+```
+
+---
+layout: center
+level: 2
+transition: none
+---
+
+# Sample KoaFoo App
+
+```ts 
+import Koa from 'koa'
+
+const app = new Koa();
+
+// response
+app.use(ctx => {
+  ctx.body = 'Hello ConFoo YUL 2024!';
+});
+
+app.listen(3000);
+```
+
+---
+layout: center
+level: 2
+transition: none
+---
+
+# Plug in Unleash
+# & **Definitely** Functionnal New Feature
+
+```ts {2,6-10,16-18|2|6-10|16-18|2,6-10,16-18}
+import Koa from 'koa'
+import { startUnleash } from 'unleash-client';
+
+const app = new Koa();
+
+const unleash = await startUnleash({
+    url: 'https://YOUR-API-URL',
+    appName: 'my-node-name',
+    customHeaders: { Authorization: 'SOME-SECRET' }
+})
+
+// response
+app.use(ctx => {
+  ctx.body = 'Hello ConFoo YUL 2024!';
+
+  if (!unleash.isEnabled("I-Did-Not-Break-This-Demo")) {
+    throw new Error("Works On My Machine(TM)!")
+  }
+});
+
+app.listen(3000);
+```
+
+---
+layout: center
+level: 2
+---
+# Demo  
+- Self-Hosted Portal
+- Add Flag
+- http://localhost:3000
+
+---
+layout: center
+level: 2
 transition: slide-up
 ---
 # Continuous Integration
@@ -356,12 +432,15 @@ gitGraph
 ```
 
 ---
-layout: center
+layout: section
 level: 2
 transition: slide-up
 ---
 
 # Killswitches
+
+Think of Feature Flags.  
+Used the Other Way Around
 
 ---
 layout: center
@@ -376,6 +455,8 @@ layout: section
 ---
 
 # Homemade Alternatives to Feature Flags Platforms
+
+<!-- This is all well and good, but I/we've already solved this issue internally! -->
 
 ---
 level: 2
@@ -425,6 +506,7 @@ level: 3
 # In-House Platform
 
 - Probably meets your current needs
+  - Or Does it?
 - **Are you in the business of selling Feature Toggles Platforms?**
 
 ---
@@ -478,3 +560,14 @@ D->>C: Push Code
 C->>S: Deploy
 D->>F: Delete Feature
 ```
+
+---
+layout: center
+hideInToc: true
+---
+
+# Questions?
+# Comments?
+# Insults?
+
+- https://github.com/carboneater
