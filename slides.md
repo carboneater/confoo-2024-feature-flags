@@ -84,6 +84,14 @@ if (FLAG) {
 [Wikipedia](https://en.wikipedia.org/wiki/Feature_toggle)
 
 ---
+level: 2
+---
+
+# What can Feature Flags be?
+
+![Unleash Demo Dashboard](imgs/unleash-dashboard.png)
+
+---
 layout: two-cols-header
 level: 2
 transition: slide-up
@@ -132,25 +140,24 @@ transition: slide-up
 - Pre-release UATs
 
 ---
-layout: center
+layout: two-cols-header
 level: 2
 transition: slide-up
 ---
 
 # Product Identification
 
+::left::
 ![NVidia GeForce vs Quadro](imgs/nvidia-quadro-desktop-gv100.jpg)
 image: [NVidia](https://nvidia.com)
 
----
-layout: center
-level: 2
-transition: slide-up
----
+::right::
 
-# Product Identification @ FOCUS
+![DIP Switches](https://upload.wikimedia.org/wikipedia/commons/3/34/Nedap_ESD1_-_printer_controller_-_DIP_switch_-_all_off-91979.jpg)
+Image: [Raymond Spekking](https://en.wikipedia.org/wiki/File:Nedap_ESD1_-_printer_controller_-_DIP_switch_-_all_off-91979.jpg)
 
-<center><img src="imgs/teensy_smd_pinout.jpg" style="max-height: 50%; max-width: 50%" /></center>
+::bottom::
+<!---->
 
 ---
 layout: two-cols-header
@@ -432,7 +439,8 @@ gitGraph
 ```
 
 ---
-layout: section
+image: ./imgs/killswitch.jpg
+layout: image-right
 level: 2
 transition: slide-up
 ---
@@ -441,6 +449,8 @@ transition: slide-up
 
 Think of Feature Flags.  
 Used the Other Way Around
+
+image: [Stahlkocher](https://en.wikipedia.org/wiki/File:Not-Aus_Bet%C3%A4tiger.jpg)
 
 ---
 layout: center
@@ -457,21 +467,6 @@ layout: section
 # Homemade Alternatives to Feature Flags Platforms
 
 <!-- This is all well and good, but I/we've already solved this issue internally! -->
-
----
-level: 2
----
-# Hardware
-
-- Soldered Components
-- Switches
-
-![DIP Switches](https://upload.wikimedia.org/wikipedia/commons/3/34/Nedap_ESD1_-_printer_controller_-_DIP_switch_-_all_off-91979.jpg)
-Image: [Raymond Spekking](https://en.wikipedia.org/wiki/File:Nedap_ESD1_-_printer_controller_-_DIP_switch_-_all_off-91979.jpg)
-
----
-layout: two-cols-header
-level: 2
 ---
 
 # Software
