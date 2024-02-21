@@ -2,6 +2,7 @@
 theme: default
 background: https://source.unsplash.com/collection/94734566/1920x1080
 class: text-center
+colorSchema: dark
 highlighter: shikiji
 lineNumbers: false
 info: |
@@ -11,10 +12,10 @@ info: |
   Learn more at [Sli.dev](https://sli.dev)
 drawings:
   persist: false
-transition: slide-left
 title: Feature Flags - ConFoo 2024
 mdc: true
 hideInToc: true
+transition: none
 ---
 
 # Feature Flags / Toggles
@@ -27,27 +28,42 @@ You're probably already reflecting on the concept if you haven't already done yo
 -->
 
 ---
+hideInToc: true
+layout: center
+---
+
+# Disclaimer
+
+This talk isn't sponsored by Unleash.
+
+Unleash was picked due to the availability of a live web demo and the ability to self host.
+
+---
+hideInToc: true
 layout: two-cols-header
-transition: none
 ---
 
 # $ whoami
 
+Security Response Dev/Sec/Ops @ Desjardins  
 Formerly DecSecOps @ FOCUS
 
 ::left::
 - 10 Hosts / 50 Services
-- < 50 transactions/s
+- < 5 transactions/s
 - 1 environment
 - < 1 deployment/week
 - 5th dev
 
 ::right::
 - 100 Hosts / 400 Services
-- 1000 transactions/s
+- 100 transactions/s
 - 10 environments
 - 200 deployments/day
 - 15 devs
+
+::bottom::
+This is the talk I wish I'd have heard at ConFoo whilst we were speeding up
 
 ---
 hideInToc: true
@@ -68,10 +84,13 @@ layout: section
 hideInToc: true
 level: 2
 layout: center
-transition: slide-up
 ---
 
 # What are Feature Flags
+
+> A condition within the code enables or disables a feature during runtime
+
+[Wikipedia](https://en.wikipedia.org/wiki/Feature_toggle)
 
 ```ts
 if (FLAG) {
@@ -79,22 +98,9 @@ if (FLAG) {
 }
 ```
 
-> A condition within the code enables or disables a feature during runtime
-
-[Wikipedia](https://en.wikipedia.org/wiki/Feature_toggle)
-
----
-level: 2
----
-
-# What can Feature Flags be?
-
-![Unleash Demo Dashboard](imgs/unleash-dashboard.png)
-
 ---
 layout: two-cols-header
 level: 2
-transition: slide-up
 ---
 
 # Terminology: Features ...
@@ -113,7 +119,11 @@ Simpler
 
 Runtime
 
-Features++
+Features ++
+
+::bottom::
+
+Informally, all the terms are used interchangeably
 
 ---
 layout: center
@@ -125,6 +135,58 @@ level: 2
 - Country/Region Selectors
 - Dark Mode
 - Language Selectors
+
+---
+layout: section
+---
+
+# Homemade Alternatives to Feature Flags Platforms
+
+<!-- This is all well and good, but I/we've already solved this issue internally! -->
+
+---
+layout: two-cols-header
+level: 2
+---
+
+## Configuration Options
+
+::left::
+## "Compiler" Flags
+  + Once and Done
+  - Requires Better Artifacts Versionning
+
+::right::
+## Environment Variables / Configuration Files
+  + No External Dependencies
+  + Allows for Environment-Specific Flags
+  - Might need to use IaC/CaC
+
+---
+layout: two-cols-header
+level: 2
+---
+
+# Software
+
+## Access Control
+
+::left::
+- Works when developing *new* features/components
+- Enables Canary Releases
+::right::
+- Loses its utility when the feature is released
+- Can only handle feature overhauls by treating them as new features
+
+---
+level: 2
+---
+
+# In-House Platform
+
+- Probably meets your current needs
+  - Or Does it?
+- **Are you in the business of selling Feature Toggles Platforms?**
 
 ---
 layout: center
@@ -162,10 +224,95 @@ Image: [Raymond Spekking](https://en.wikipedia.org/wiki/File:Nedap_ESD1_-_printe
 ---
 layout: two-cols-header
 level: 2
-transition: slide-up
 ---
 
 # Decouple Deployment from Release
+
+::left::
+## You're probably past big bang releases
+
+- Rolling Release
+- Canaries
+- A/B Testing
+- ...
+
+::right::
+## Business Constraints
+
+If you have to release a feature at a given date.
+
+- Murphy's Law will fail your merge/deployment
+- Better to have the code ready in prod
+
+---
+layout: two-cols-header
+level: 2
+transition: slide-left
+---
+
+# Rolling Releases
+
+::left::
+
+```mermaid
+flowchart TD
+Service --> S1[Version 1] & S2[Version 1] & S3[Version 2]
+```
+
+::right::
+
+```mermaid
+flowchart TD
+Service --> S1[Version 1] & S2[Version 2] & S3[Version 2]
+```
+
+::bottom::
+
+Pitfall: There's a special kind of emergent failure modes in your changes using rolling release
+
+---
+layout: two-cols-header
+level: 2
+---
+
+# Example: Transient Rollover Failure Window
+
+::left::
+
+![Path](imgs/travel.png)
+
+::right::
+
+|Server|X|Y|Odo|
+|---|---|---|---|
+|1|0|1|0|
+|2|1|1|null|
+|1|2|1|2|
+|2|2|2|null|
+|1|3|2|2.47|
+
+---
+image: ./imgs/killswitch.jpg
+layout: image-right
+level: 2
+transition: slide-up
+---
+
+# Killswitches
+
+Think of Feature Flags.  
+Used the Other Way Around
+
+image: [Stahlkocher](https://en.wikipedia.org/wiki/File:Not-Aus_Bet%C3%A4tiger.jpg)
+
+---
+layout: two-cols-header
+level: 2
+---
+
+# Storytime: When CD gets ahead of the Team!
+
+<!--For Simplicity's Sake, this Demo is made using gitgraph of a project-->
 
 - You're releasing a new feature, say `v4.2.0`.
 - It's promply rolled back.
@@ -215,12 +362,11 @@ It's still far from ideal as as your automation is still primed to release v4.2.
 -->
 
 ---
-layout: default
 level: 2
-transition: none
 ---
 
-# Decouple Deployment from Release Cont.
+# You could create a version branch
+
 
 ```mermaid
 gitGraph
@@ -247,7 +393,7 @@ level: 2
 transition: none
 ---
 
-# Decouple Deployment from Release Cont.
+# Your CD is still primed to release 
 
 ```mermaid
 gitGraph
@@ -278,10 +424,9 @@ gitGraph
 ---
 layout: default
 level: 2
-transition: none
 ---
 
-# Decouple Deployment from Release Cont.
+# Now, your team has to work on the version branch...
 
 ```mermaid
 gitGraph
@@ -307,14 +452,6 @@ gitGraph
 ```
 
 <!-- By now, you're probably already tired of fighting your CI/CD -->
-
----
-layout: center
-level: 2
-transition: none
----
-
-![Code Freeze](https://codefreeze.fi/logos/codefreeze.svg)
 
 ---
 layout: section
@@ -376,7 +513,7 @@ transition: none
 # Plug in Unleash
 # & **Definitely** Functionnal New Feature
 
-```ts {2,6-10,16-18|2|6-10|16-18|2,6-10,16-18}
+```ts {2,6-10,16-18|2|6-10|16-18|*}
 import Koa from 'koa'
 import { startUnleash } from 'unleash-client';
 
@@ -392,7 +529,7 @@ const unleash = await startUnleash({
 app.use(ctx => {
   ctx.body = 'Hello ConFoo YUL 2024!';
 
-  if (!unleash.isEnabled("I-Did-Not-Break-This-Demo")) {
+  if (unleash.isEnabled("I-Did-Not-Break-This-Demo")) {
     throw new Error("Works On My Machine(TM)!")
   }
 });
@@ -408,101 +545,6 @@ level: 2
 - Self-Hosted Portal
 - Add Flag
 - http://localhost:3000
-
----
-layout: center
-level: 2
-transition: slide-up
----
-# Continuous Integration
-
-```mermaid
-gitGraph
-    commit id: "Last Day's Work" tag: "v1.2.3"
-    branch hotfix
-    branch wip-feat-1
-    checkout wip-feat-1
-    commit
-    checkout hotfix
-    commit id: "Hotfix!"
-    checkout main
-    merge hotfix tag: "v1.2.4"
-    checkout wip-feat-1
-    commit
-    checkout main
-    merge wip-feat-1 tag: "v1.2.5"
-    checkout hotfix
-    merge main
-    commit id: "Panic!"
-    checkout main
-    merge hotfix tag: "v1.2.6"
-```
-
----
-image: ./imgs/killswitch.jpg
-layout: image-right
-level: 2
-transition: slide-up
----
-
-# Killswitches
-
-Think of Feature Flags.  
-Used the Other Way Around
-
-image: [Stahlkocher](https://en.wikipedia.org/wiki/File:Not-Aus_Bet%C3%A4tiger.jpg)
-
----
-layout: center
-level: 2
-transition: slide-left
----
-
-# Canary Releases
-
----
-layout: section
----
-
-# Homemade Alternatives to Feature Flags Platforms
-
-<!-- This is all well and good, but I/we've already solved this issue internally! -->
----
-
-# Software
-
-## Access Control
-
-::left::
-- Works when developing *new* features/components
-- Enables Canary Releases
-::right::
-- Loses its utility when the feature is released
-- Can only handle feature overhauls by treating them as new features
-
----
-level: 3
----
-
-## Configuration Options
-
-- "Compiler" Flags
-  + Once and Done
-  - Requires Better Artifacts Versionning
-- Environment Variables / Configuration Files
-  + No External Dependencies
-  + Allows for Environment-Specific Flags
-  - Might need to use IaC/CaC 
-
----
-level: 3
----
-
-# In-House Platform
-
-- Probably meets your current needs
-  - Or Does it?
-- **Are you in the business of selling Feature Toggles Platforms?**
 
 ---
 level: 1
