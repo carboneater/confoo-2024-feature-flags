@@ -22,6 +22,8 @@ transition: none
 
 Often Hinted at. Seldom Introduced
 
+Level: Beginner
+
 
 <!--
 You're probably already reflecting on the concept if you haven't already done your own implementation of it...
@@ -45,7 +47,7 @@ layout: two-cols-header
 
 # $ whoami
 
-Security Response Dev/Sec/Ops @ Desjardins  
+[SOAR](https://en.wikipedia.org/wiki/Security_orchestration) Dev/Sec/Ops @ Desjardins  
 Formerly DecSecOps @ FOCUS
 
 ::left::
@@ -53,6 +55,7 @@ Formerly DecSecOps @ FOCUS
 - < 5 transactions/s
 - 1 environment
 - < 1 deployment/week
+- ~5k IoT Devices
 - 5th dev
 
 ::right::
@@ -60,6 +63,7 @@ Formerly DecSecOps @ FOCUS
 - 100 transactions/s
 - 10 environments
 - 200 deployments/day
+- ~50k IoT Devices
 - 15 devs
 
 ::bottom::
@@ -123,7 +127,7 @@ Features ++
 
 ::bottom::
 
-Informally, all the terms are used interchangeably
+Informally, all are used interchangeably
 
 ---
 layout: center
@@ -132,15 +136,28 @@ level: 2
 
 # What aren't Feature Flags
 
-- Country/Region Selectors
-- Dark Mode
-- Language Selectors
+- User-Selectable Configuration
+  - Country/Region Selectors
+  - Dark Mode
+  - Language Selectors
+- Your Admin Dashboard
+
+---
+layout: center
+level: 2
+---
+
+# What shouldn't Be  Behind Feature Flags
+
+- Bugfixes
+- Everything
+  - The Kitchen Sink
 
 ---
 layout: section
 ---
 
-# Homemade Alternatives to Feature Flags Platforms
+# Homemade Alternatives to Feature Toggles Platforms
 
 <!-- This is all well and good, but I/we've already solved this issue internally! -->
 
@@ -172,21 +189,34 @@ level: 2
 ## Access Control
 
 ::left::
+## Pros
 - Works when developing *new* features/components
 - Enables Canary Releases
 ::right::
-- Loses its utility when the feature is released
+
+## Cons
+- Loses its utility once the feature is released
 - Can only handle feature overhauls by treating them as new features
 
 ---
+layout: two-cols-header
 level: 2
 ---
 
 # In-House Platform
 
+::left::
+# Pros
 - Probably meets your current needs
-  - Or Does it?
+- Might meet your **very complex** needs
+- Might have to handle _sensitive_ data
+
+::right::
+# Cons
+- Or Does it?
 - **Are you in the business of selling Feature Toggles Platforms?**
+
+- Does it support the [Open Feature](https://openfeature.dev/) spec?
 
 ---
 layout: center
@@ -229,7 +259,7 @@ level: 2
 # Decouple Deployment from Release
 
 ::left::
-## You're probably past big bang releases
+## Going past _big bang_ releases
 
 - Rolling Release
 - Canaries
@@ -239,10 +269,10 @@ level: 2
 ::right::
 ## Business Constraints
 
-If you have to release a feature at a given date.
-
-- Murphy's Law will fail your merge/deployment
-- Better to have the code ready in prod
+- If you have to release a feature at a given date.
+  - Murphy's Law will fail your merge/deployment
+  - Better to have the code ready in prod
+- If you have regulatory frameworks to follow
 
 ---
 layout: two-cols-header
@@ -268,14 +298,14 @@ Service --> S1[Version 1] & S2[Version 2] & S3[Version 2]
 
 ::bottom::
 
-Pitfall: There's a special kind of emergent failure modes in your changes using rolling release
+Pitfall: There's a special kind of emergent failure modes in your changes when using rolling release
 
 ---
 layout: two-cols-header
 level: 2
 ---
 
-# Example: Transient Rollover Failure Window
+# Example Transient Rollover Failure Window
 
 ::left::
 
@@ -283,13 +313,37 @@ level: 2
 
 ::right::
 
-|Server|X|Y|Odo|
-|---|---|---|---|
-|1|0|1|0|
-|2|1|1|null|
-|1|2|1|2|
-|2|2|2|null|
-|1|3|2|2.47|
+|id|Server|X|Y|Odo|Expected Odo|
+|---|---|---|---|---|---|
+|0|2|0|1|0|0|
+|1|1|1|1|null|1|
+|2|2|2|1|2|2|
+|3|1|2|2|null|3|
+|4|2|3|2|3.44|4|
+
+::bottom::
+On distributed systems, non-breaking changes may cause unexpected behaviors when being progressively released, **if they rely on data processed by other instances**
+
+---
+level: 2
+---
+
+# Transient Rollover Failure Window
+
+
+```mermaid
+sequenceDiagram
+
+participant S1 as Server 1
+participant S2 as Server 2
+participant S3 as Server 3
+
+Note over S1, S3: Running 1.1
+Note over S1: Upgrade to 1.2
+Note over S2: Upgrade to 1.2
+Note over S3: Upgrade to 1.2
+Note over S1, S3: Running 1.2
+```
 
 ---
 image: ./imgs/killswitch.jpg
@@ -304,6 +358,18 @@ Think of Feature Flags.
 Used the Other Way Around
 
 image: [Stahlkocher](https://en.wikipedia.org/wiki/File:Not-Aus_Bet%C3%A4tiger.jpg)
+
+---
+level: 2
+---
+
+# UATs
+
+Most modern Feature Flags System Implementation offer environment management.
+
+It is trivial to flag an environment for UAT for a given feature.
+
+Note: Unleash Free/Self-Hosted is limited to Dev/Prod Environments
 
 ---
 layout: two-cols-header
@@ -459,7 +525,7 @@ hideInToc: true
 transition: slide-up
 ---
 
-# DEMO
+# Using Unleash Platform
 
 <!-- You Suffered Enough! Time for me to put my money where my mouth is! -->
 
@@ -547,64 +613,82 @@ level: 2
 - http://localhost:3000
 
 ---
+hideInToc: true
 level: 1
 layout: section
 ---
 
-# Let's Decouple Features From Versions!
+# Going Forward
+
+---
+layout: two-cols-header
+level: 2
+---
+
+# Feature Flags Lifetime
+
+::left::
+
+## Release Flags
+
+_As Short-Lived As Possible_
+
+::right::
+
+## Killswitches
+
+Permanent
 
 ---
 level: 2
 ---
 
-```mermaid
-sequenceDiagram
-actor D as Dev
-participant C as SCM + CI/CD
-participant S as Prod
-participant F as Feature<br/>Platform
-actor B as Business
-B ->> F: Create Flags
+# Best Pratices:
 
-Note over D: Write Code
-
-D ->> C: Push Code
-Note over C: Build, Test, Assemble
-
-C ->> S: Deploy
-
-B ->> F: Activate Feature
-
-S->>F: Poll
-F->>S: Activate Features
-```
+- Do not put business logic in your Toggles
+- Do not put Confidential Information (eg: PII) in your toggles
+- Instrument your feature branches
+- Remove the dead branch
+  - Or at least have a new ticket to do so at a later date
+  - Also Prune / Archive old flags in your tracker
 
 ---
 level: 2
 ---
-# Drop Dead Branch
 
-```mermaid
-sequenceDiagram
-actor D as Dev
-participant C as SCM + CI/CD
-participant S as Prod
-participant F as Feature<br/>Platform
-actor B as Business
+# Release Strategies
 
-Note over D: Drop Dead Branch
-D->>C: Push Code
-C->>S: Deploy
-D->>F: Delete Feature
-```
+<v-clicks>
+
+- On/Off
+- Progressive Rollout
+- Custom Logic
+  - Application
+  - User
+  - Environment
+  - ...
+
+</v-clicks>
+
+<!--Unleash Provides you with a whole lot of release strategies. Pick the one that fits your needs-->
 
 ---
-layout: center
+
+# Conclusion
+
+- Make sure the solution you're using meets your needs
+- Feature Flag Systems will help you smooth your release process when scaling
+- Use as few features at a time as possible
+
+---
+layout: end
 hideInToc: true
 ---
 
-# Questions?
-# Comments?
-# Insults?
+# Thank You!
 
-- https://github.com/carboneater
+## Questions?
+## Comments?
+## Insults?
+
+Slides Deck: [https://github.com/carboneater/confoo-2024-feature-flags](https://github.com/carboneater/confoo-2024-feature-flags)
