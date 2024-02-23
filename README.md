@@ -1,4 +1,6 @@
-# Welcome to [Slidev](https://github.com/slidevjs/slidev)!
+# [Feature Flags. Often Praised. Seldom Introduced.](https://confoo.ca/en/2024/session/feature-flags-often-praised-seldom-talked-about) (ConFoo 2024)
+
+To run the demo, you will need to either use Unleash's [live demo](https://docs.getunleash.io/quickstart#more-unleash) or [self-host it](https://docs.getunleash.io/quickstart)
 
 To start the slide show:
 
@@ -9,3 +11,4 @@ To start the slide show:
 Edit the [slides.md](./slides.md) to see the changes.
 
 Learn more about Slidev on [documentations](https://sli.dev/).
+
